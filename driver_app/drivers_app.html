@@ -41,7 +41,7 @@
     form.addEventListener('submit', function(e) {
       e.preventDefault();
       userData = {
-        driverId: email+"1234", // Unique ID for the driver
+        driverId: document.getElementById('email').value +"1234", // Unique ID for the driver
         name: document.getElementById('name').value,
         email: document.getElementById('email').value
       };

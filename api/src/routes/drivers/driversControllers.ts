@@ -21,6 +21,5 @@ export async function updateDriverLocation(req: Request, res: Response) {
     console.error(err); 
     res.status(500).json({ error: 'Could not update location' });
   }
-    
-  res.status(200).send(`Driver ${driverId} location `);
+  
 }

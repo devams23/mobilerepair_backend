@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Complaint Form</title>
+    <style>
+      body {
+        font-family: sans-serif;
+        background: #f7f7f7;
+        padding: 20px;
+      }
+      form {
+        background: white;
+        padding: 20px;
+        max-width: 500px;
+        margin: auto;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+      input,
+      textarea,
+      button {
+        width: 100%;
+        margin-top: 10px;
+        padding: 10px;
+        font-size: 16px;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+      }
+      button {
+        background: #0d6efd;
+        color: white;
+        border: none;
+        cursor: pointer;
+      }
+      button:hover {
+        background: #0b5ed7;
+      }
+    </style>
+  </head>
+  <body>
+    <h2 style="text-align: center">Submit a Complaint</h2>
+    <form id="complaintForm">
+      <input
+        type="text"
+        id="mobile_name"
+        name="mobile_name"
+        placeholder="Mobile Name"
+        required
+      />
+      <input type="text" id="model" name="model" placeholder="Model" required />
+      <textarea
+        name="description"
+        rows="5"
+        placeholder="Describe your complaint..."
+        required
+      ></textarea>
+
+      <!-- Hidden fields for location -->
+      <input type="hidden" name="latitude" id="latitude" />
+      <input type="hidden" name="longitude" id="longitude" />
+
+      <button type="submit">Submit Complaint</button>
+    </form>
+
+    <script>
+      const form = document.getElementById("complaintForm");
+      let complaintData = {};
+          const apiUrl = 'http://localhost:3000/complaints';
+      window.onload = function () {
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(
+            function (position) {
+              document.getElementById("latitude").value =
+                position.coords.latitude;
+              document.getElementById("longitude").value =
+                position.coords.longitude;
+            },
+            function (error) {
+              console.error("Error getting location:", error);
+              alert("Unable to retrieve your location.");
+            }
+          );
+        } else {
+          alert("Geolocation is not supported by this browser.");
+        }
+      };
+
+      form.addEventListener("submit", (e) => {
+        e.preventDefault();
+        complaintData = {
+          userId: 12345678, // just for the testing purpose
+          complaintId : Date.now(),
+          mobile: document.getElementById("mobile_name").value ?? "",
+          mobile_model: document.getElementById("model").value ?? "",
+          complaint_text: document.getElementById("model").value ?? "",
+          longitude: document.getElementById("longitude").value ?? "",
+          latitude: document.getElementById("latitude").value ?? "",
+        };
+
+        fetch(apiUrl, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(complaintData),
+        })
+          .then((response) => {
+            if (response.ok) {
+              status.textContent = `Location sent: ${data.latitude}, ${data.longitude}`;
+            } else {
+              status.textContent = "Failed to send location.";
+            }
+          })
+          .catch(() => {
+            status.textContent = "Error sending location.";
+          });
+      });
+    </script>
+  </body>
+</html>

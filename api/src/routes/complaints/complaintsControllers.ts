@@ -9,12 +9,18 @@ type Location = {
 export function getComplaints(req: Request, res: Response) {
   res.status(200).send("List of complaints");
 }
-export function createComplaints(req: Request, res: Response) {
-  const { complaintId, description, status, latitude, longitude } = req.body;
+export async function  createComplaints(req: Request, res: Response) {
+  console.log(req.body);
+  const { userId, complaintId ,mobile, mobile_model, complaint_text, latitude, longitude } = req.body;
   try {
-    console.log(getAvailableDrivers({ latitude, longitude }));
-  } catch (error) {}
-  res.status(200).send("new complaint created");
+    const drivers = await getAvailableDrivers({ latitude, longitude });
+    console.log(drivers);
+    res.status(200).send("new complaint created");
+
+  } catch (error) {
+    console.error(error);
+    res.status(404).send("error registering a complaint");
+  }
 }
 export function updateComplaints(req: Request, res: Response) {
   res.status(200).send("update complaints");
@@ -35,7 +41,7 @@ async function getAvailableDrivers(complaintLocation: Location) {
     },
     {
       radius: 5000, // 5 km radius
-      unit: "km", // meters
+      unit: "km", // distance units
     }
   );
 
