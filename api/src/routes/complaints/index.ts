@@ -1,5 +1,5 @@
 import {Router} from 'express'
-import { getComplaints,createComplaints,updateComplaints,getComplaintsById , deleteComplaints} from './complaintsControllers';
+import { getComplaints,createComplaint,updateComplaints,getComplaintsById , deleteComplaints} from './complaintsControllers';
 
 const router = Router();
 
@@ -9,7 +9,7 @@ router.get('/', (req, res) => {
 
 router.get('/all', getComplaints);
 router.get('/:id', getComplaintsById); 
-router.post('/', createComplaints);
+router.post('/', createComplaint);
 router.put('/:id', updateComplaints);
 router.delete('/:id', deleteComplaints);
 

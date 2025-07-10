@@ -1,15 +1,18 @@
 import { Request, Response } from "express";
 import redisclient from "../../redis/redisClient";
+import { sendNotification } from "../../service/NotificationService";
 
 type Location = {
   latitude: number;
   longitude: number;
 };
 
-export function getComplaints(req: Request, res: Response) {
+export async function getComplaints(req: Request, res: Response) {
+  await sendNotification("eh7vzvcqB83dZvsm0TPqgA:APA91bHS80WYHNcYT13hpydVAWAu84C3un_0NNRv7QrVlmsw5B48FqiuMHKf6DcvSeYSqhzUrLHl9tew7hk6YWQ84HhSYOGZidi_6Dg_S4UdHx6a7yozWfg" , "hello nessage"  , "this is body")
+  
   res.status(200).send("List of complaints");
 }
-export async function  createComplaints(req: Request, res: Response) {
+export async function  createComplaint(req: Request, res: Response) {
   console.log(req.body);
   const { userId, complaintId ,mobile, mobile_model, complaint_text, latitude, longitude } = req.body;
   try {
